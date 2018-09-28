@@ -53,3 +53,94 @@ module Imp_ex
       end
     end
 end
+
+(* Same as above, but counts the number of execution steps *)
+module Imp_exn
+
+  use imp.Imp
+  use state.State
+  use bool.Bool
+  use int.Int
+  use bv_op.BV_OP
+
+  let rec aeval_ex  (st:state) (e:aexpr): (int, int)
+    variant { e }
+    ensures { let (e', _) = result in e' = aeval st e }
+  =
+    match e with
+      | Anum n      -> (n, 1)
+      | Avar x      -> (st[x], 1)
+      | Aadd e1 e2  ->
+        let (lhs, cntl) = aeval_ex st e1 in
+        let (rhs, cntr) = aeval_ex st e2 in
+        (lhs + rhs, cntl + cntr + 1)
+      | Aaddu e1 e2 ->
+        let (lhs, cntl) = aeval_ex st e1 in
+        let (rhs, cntr) = aeval_ex st e2 in
+        (bv_add lhs rhs, cntl + cntr + 1)
+      | Asub e1 e2  ->
+        let (lhs, cntl) = aeval_ex st e1 in
+        let (rhs, cntr) = aeval_ex st e2 in
+        (lhs - rhs, cntl + cntr + 1)
+    end
+
+
+  let rec beval_ex (st:state) (b:bexpr): (bool, int)
+    variant { b }
+    ensures { let (b', _) = result in b' = beval st b }
+  =
+    match b with
+      | Btrue      -> (true, 1)
+      | Bfalse     -> (false, 1)
+      | Bnot b'    ->
+        let (b'', cnt) = beval_ex st b' in
+        (notb b'', cnt + 1)
+      | Band b1 b2 ->
+        let (lhs, cntl) = beval_ex st b1 in
+        let (rhs, cntr) = beval_ex st b2 in
+        (andb lhs rhs, cntl + cntr + 1)
+      | Beq a1 a2  ->
+        let (lhs, cntl) = aeval_ex st a1 in
+        let (rhs, cntr) = aeval_ex st a2 in
+        (lhs = rhs, cntl + cntr + 1)
+      | Ble a1 a2  ->
+        let (lhs, cntl) = aeval_ex st a1 in
+        let (rhs, cntr) = aeval_ex st a2 in
+        (lhs <= rhs, cntl + cntr + 1)
+    end
+
+
+  let rec ceval_ex (st:state) (c:com): (state, int)
+    diverges (* uncomment when actually diverging*)   
+    ensures { let (c', _) = result in ceval st c c' }
+  =
+    match c with
+    | Cskip            -> (st, 1)
+    | Cassign id aexpr ->
+      let (res, cnt) = aeval_ex st aexpr in
+      (st[id <- res], cnt + 1)
+    | Cseq c1 c2       ->
+      let (st1, cnt1) = ceval_ex st c1 in
+      let (st2, cnt2) = ceval_ex st1 c2 in
+      (st2, cnt1 + cnt2)
+    | Cif bexpr c1 c2  ->
+      let (cond, cnt) = beval_ex st bexpr in
+      match cond with
+      | True ->
+        let (st', cnt') = ceval_ex st c1 in
+        (st', cnt + cnt')
+      | False ->
+        let (st', cnt') = ceval_ex st c2 in
+        (st', cnt + cnt')
+      end
+    | Cwhile bexpr com ->
+      let (cond, cnt) = beval_ex st bexpr in
+      match cond with
+      | True ->
+        let (st', cnt') = ceval_ex st com in
+        let (st'', cnt'') = ceval_ex st' c in
+        (st'', cnt + cnt' + cnt'')
+      | False -> (st, cnt)
+      end
+    end
+end
