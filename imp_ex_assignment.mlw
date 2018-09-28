@@ -108,39 +108,44 @@ module Imp_exn
         let (rhs, cntr) = aeval_ex st a2 in
         (lhs <= rhs, cntl + cntr + 1)
     end
+    
+  exception MaxStepsReached state
 
-
-  let rec ceval_ex (st:state) (c:com): (state, int)
+  let rec ceval_ex (st:state) (c:com) (maxCnt:int): (state, int)
     diverges (* uncomment when actually diverging*)   
     ensures { let (c', _) = result in ceval st c c' }
+    raises { MaxStepsReached }
   =
-    match c with
+    let (c', cnt) = match c with
     | Cskip            -> (st, 1)
     | Cassign id aexpr ->
       let (res, cnt) = aeval_ex st aexpr in
       (st[id <- res], cnt + 1)
     | Cseq c1 c2       ->
-      let (st1, cnt1) = ceval_ex st c1 in
-      let (st2, cnt2) = ceval_ex st1 c2 in
+      let (st1, cnt1) = ceval_ex st c1 maxCnt in
+      let (st2, cnt2) = ceval_ex st1 c2 maxCnt in
       (st2, cnt1 + cnt2)
     | Cif bexpr c1 c2  ->
       let (cond, cnt) = beval_ex st bexpr in
       match cond with
       | True ->
-        let (st', cnt') = ceval_ex st c1 in
+        let (st', cnt') = ceval_ex st c1 maxCnt in
         (st', cnt + cnt')
       | False ->
-        let (st', cnt') = ceval_ex st c2 in
+        let (st', cnt') = ceval_ex st c2 maxCnt in
         (st', cnt + cnt')
       end
     | Cwhile bexpr com ->
       let (cond, cnt) = beval_ex st bexpr in
       match cond with
       | True ->
-        let (st', cnt') = ceval_ex st com in
-        let (st'', cnt'') = ceval_ex st' c in
+        let (st', cnt') = ceval_ex st com maxCnt in
+        let (st'', cnt'') = ceval_ex st' c maxCnt in
         (st'', cnt + cnt' + cnt'')
       | False -> (st, cnt)
       end
-    end
+    end in if (maxCnt = 0) || cnt <= maxCnt then
+      (c', cnt)
+    else
+      raise (MaxStepsReached c')
 end
