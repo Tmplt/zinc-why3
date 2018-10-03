@@ -14,12 +14,12 @@ module Vm_Ex
 
   exception Err
   exception Halt machine_state
- 
+
   lemma codeseq_at_zero:
-    forall c1 c2. length c1 = 0 -> 
+    forall c1 c2. length c1 = 0 ->
       codeseq_at (c1 ++ c2) 0 c2
 
-  let rec split_at p (c:code)   
+  let rec split_at p (c:code)
     raises   { Err ->  p >= length c }
 
     requires { p >= 0 } (* well founded *)
@@ -51,41 +51,112 @@ module Vm_Ex
     | Cons rv rs -> (rv, rs)
     end
 
-  let instr_ex (c: code) (ms: machine_state): machine_state 
+  let instr_ex (c: code) (ms: machine_state): machine_state
     raises   { Err }
     raises   { Halt (VMS p _ _ _) -> codeseq_at c p ihalt }
-    ensures  { transition c ms result } 
+    ensures  { transition c ms result }
   =
     let VMS p r s m = ms in (* split machine state *)
-    
+
     if p < 0 then raise Err;
 
-    try 
-      let (_, Cons instr _) = split_at p c in      
+    try
+      let (_, Cons instr _) = split_at p c in
       assert { codeseq_at c p (Cons instr Nil)};
-    
-      match instr with      
-      
-      | Iconst n    -> (*   push n on stack                               *)
-        VMS (p + 1) r (push n s) m 
-        
-    
-      | Ihalt -> raise (Halt ms)
-      
-      (* your code here *)
-    
-      | _ -> raise Err
+      match instr with
+      (* new instructions, register based *)
+      | Iload idr id -> (* load register with variable *)
+        VMS (p + 1) (write r idr m[id]) s m
+      | Iimm idr n   -> (* load register with value n *)
+        VMS (p + 1) (write r idr n) s m
+      | Istore idr id -> (* store a register to a variable *)
+        let n = read r idr in
+        VMS (p + 1) r s m[id <- n]
+      | Ipushr idr -> (* push register on stack *)
+        VMS (p + 1) r (push (read r idr) s) m
+      | Ipopr idr -> (* pop register from stack *)
+        let (n, s') = pop s in
+        VMS (p + 1) (write r idr n) s' m
+      | Iaddr lhs rhs res -> (* res = lhs + rhs *)
+        let lhs = read r lhs in
+        let rhs = read r rhs in
+        VMS (p + 1) (write r res (lhs + rhs)) s m
+      | Iaddur lhs rhs res -> (* res = lhs + rhs (wrapping) *)
+        let lhs = read r lhs in
+        let rhs = read r rhs in
+        VMS (p + 1) (write r res (bv_add lhs rhs)) s m
+      | Isubr lhs rhs res -> (* res = lhs - rhs *)
+        let lhs = read r lhs in
+        let rhs = read r rhs in
+        VMS (p + 1) (write r res (lhs - rhs)) s m
+      | Ibeqr r1 r2 ofs -> (* skip ofs forward if r1 = r2 *)
+        let r1 = read r r1 in
+        let r2 = read r r2 in
+        VMS (p + 1 + if r1 = r2 then ofs else 0) r s m
+      | Ibner r1 r2 ofs -> (* skip ofs forward if r1 != r2 *)
+        let r1 = read r r1 in
+        let r2 = read r r2 in
+        VMS (p + 1 + if (not r1 = r2) then ofs else 0) r s m
+      | Ibler r1 r2 ofs -> (* skip ofs forward if r1 <= r2 *)
+        let r1 = read r r1 in
+        let r2 = read r r2 in
+        VMS (p + 1 + if r1 <= r2 then ofs else 0) r s m
+      | Ibgtr r1 r2 ofs -> (* skip ofs forward if r1 > r2 *)
+        let r1 = read r r1 in
+        let r2 = read r r2 in
+        VMS (p + 1 + if r1 > r2 then ofs else 0) r s m
+
+      (* origin/old instructions for stack machine *)
+      | Iconst n    -> (* push n on stack *)
+        VMS (p + 1) r (push n s) m
+      | Ivar id     -> (* push the value of a variable *)
+        VMS (p + 1) r (push m[id] s) m
+      | Isetvar id  -> (* pop an integer, assign it to a variable *)
+        let (n, s') = pop s in
+        VMS (p + 1) r s' m[id <- n]
+      | Ibranch ofs -> (* skip ofs instructions *)
+        VMS (p + 1 + ofs) r s m
+      | Iadd        -> (* pop two values, push their sum *)
+        let (n1, s') = pop s in
+        let (n2, s'') = pop s' in
+        VMS (p + 1) r (push (n1 + n2) s'') m
+      | Iaddu       -> (* pop two values, push their sum (wrapping) *)
+        let (n1, s') = pop s in
+        let (n2, s'') = pop s' in
+        VMS (p + 1) r (push (bv_add n1 n2) s'') m
+      | Isub        -> (* pop two values, push their difference *)
+        let (n1, s') = pop s in
+        let (n2, s'') = pop s' in
+        VMS (p + 1) r (push (n2 - n1) s'') m
+      | Ibeq ofs    -> (* pop n2, pop n1, skip ofs forward if n1 = n2 *)
+        let (n2, s') = pop s in
+        let (n1, s'') = pop s' in
+        VMS (p + 1 + if n1 = n2 then ofs else 0) r s'' m
+      | Ibne ofs    -> (* pop n2, pop n1, skip ofs forward if n1 != n2 *)
+        let (n2, s') = pop s in
+        let (n1, s'') = pop s' in
+        VMS (p + 1 + if (not n1 = n2) then ofs else 0) r s'' m
+      | Ible ofs    -> (* pop n2, pop n1, skip ofs forward if n1 <= n2 *)
+        let (n2, s') = pop s in
+        let (n1, s'') = pop s' in
+        VMS (p + 1 + if n1 <= n2 then ofs else 0) r s'' m
+      | Ibgt ofs    -> (* pop n2, pop n1, skip ofs forward if n1 > n2 *)
+        let (n2, s') = pop s in
+        let (n1, s'') = pop s' in
+        VMS (p + 1 + if n1 > n2 then ofs else 0) r s'' m
+      | Ihalt       -> raise (Halt ms)
+      | _           -> raise Err
       end
-    with 
-      Err -> raise Err  
+    with
+      Err -> raise Err
     end
-          
+
   let rec instr_iter_ex (c: code) (ms: machine_state): machine_state 
     raises   { Err }
     raises   { Halt (VMS p _ _ _) -> codeseq_at c p ihalt }
-    ensures  { transition_star c ms result } 
+    ensures  { transition_star c ms result }
     diverges
   =
-    instr_iter_ex c (instr_ex c ms)   
-   
+    instr_iter_ex c (instr_ex c ms)
+
 end

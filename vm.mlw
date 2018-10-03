@@ -149,12 +149,12 @@ theory Vm
   let function ibne (ofs:ofs) : code    = Cons (Ibne ofs)     Nil
   let function ibgt (ofs:ofs) : code    = Cons (Ibgt ofs)     Nil
   let function ibranch (ofs:ofs) : code = Cons (Ibranch ofs)  Nil
-  let constant ihalt : code             = Cons Ihalt          Nil      
+  let constant ihalt : code             = Cons Ihalt          Nil
 
   (* The semantics of the virtual machine is given in small-step style,
     as a transition relation between machine states: tupels 
     (program counter, evaluation stack, variable state, register state). 
-     
+
     The transition relation is parameterized by the code c. There is one 
     transition rule for each kind of instruction, except Ihalt, 
     which has no transition. *)
