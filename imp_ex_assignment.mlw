@@ -16,6 +16,7 @@ module Imp_ex
       | Aadd e1 e2  -> aeval_ex st e1 + aeval_ex st e2
       | Aaddu e1 e2 -> bv_add (aeval_ex st e1) (aeval_ex st e2)
       | Asub e1 e2  -> aeval_ex st e1 - aeval_ex st e2
+      | Asubu e1 e2  -> bv_sub (aeval_ex st e1) (aeval_ex st e2)
     end
 
 
@@ -82,6 +83,10 @@ module Imp_exn
         let (lhs, cntl) = aeval_ex st e1 in
         let (rhs, cntr) = aeval_ex st e2 in
         (lhs - rhs, cntl + cntr + 1)
+      | Asubu e1 e2  ->
+        let (lhs, cntl) = aeval_ex st e1 in
+        let (rhs, cntr) = aeval_ex st e2 in
+        (bv_sub lhs rhs, cntl + cntr + 1)
     end
 
 

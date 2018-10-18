@@ -123,7 +123,7 @@ module Vm_Ex
       | Iaddu       -> (* pop two values, push their sum (wrapping) *)
         let (n1, s') = pop s in
         let (n2, s'') = pop s' in
-        VMS (p + 1) r (push (bv_add n1 n2) s'') m
+        VMS (p + 1) r (push (bv_add n2 n1) s'') m
       | Isub        -> (* pop two values, push their difference *)
         let (n1, s') = pop s in
         let (n2, s'') = pop s' in
