@@ -37,7 +37,7 @@ module Imp_ex
   let rec ceval_ex (st:state) (c:com): state
     diverges (* uncomment when actually diverging *)
     ensures { ceval st c result }
-    =
+  =
     match c with
     | Cskip -> st
     | Cassign id aexpr -> st[id <- aeval_ex st aexpr]
@@ -64,7 +64,7 @@ module Imp_exn
   use int.Int
   use bv_op.BV_OP
 
-  let rec aeval_ex  (st:state) (e:aexpr): (int, int)
+  let rec function aeval_ex  (st:state) (e:aexpr): (int, int)
     variant { e }
     ensures { let (e', _) = result in e' = aeval st e }
   =
@@ -90,7 +90,7 @@ module Imp_exn
     end
 
 
-  let rec beval_ex (st:state) (b:bexpr): (bool, int)
+  let rec function beval_ex (st:state) (b:bexpr): (bool, int)
     variant { b }
     ensures { let (b', _) = result in b' = beval st b }
   =
@@ -117,7 +117,7 @@ module Imp_exn
   exception MaxStepsReached state
 
   let rec ceval_ex (st:state) (c:com) (maxCnt:int): (state, int)
-    diverges (* uncomment when actually diverging *)
+    diverges
     ensures { let (c', _) = result in ceval st c c' }
     raises { MaxStepsReached }
   =

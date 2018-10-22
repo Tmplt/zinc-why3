@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="5">
+<prover id="0" name="Alt-Ergo" version="2.2.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Z3" version="4.7.1" alternative="counterexamples" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Eprover" version="2.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC4" version="1.6" timelimit="5" steplimit="0" memlimit="1000"/>
+<file name="../ast_opt.mlw" proved="true">
+<theory name="Ast_opt" proved="true">
+ <goal name="VC opt_aexpr" expl="VC for opt_aexpr" proved="true">
+ <transf name="split_goal_right" proved="true" >
+  <goal name="VC opt_aexpr.0" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="446"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.15" steps="446"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.2" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="447"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.3" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.11" steps="447"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.4" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="446"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.5" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.11" steps="446"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.6" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.13" steps="447"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.7" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.11" steps="447"/></proof>
+  </goal>
+  <goal name="VC opt_aexpr.8" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.36" steps="1280"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="VC opt_bexpr" expl="VC for opt_bexpr" proved="true">
+ <transf name="split_goal_right" proved="true" >
+  <goal name="VC opt_bexpr.0" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="416"/></proof>
+  </goal>
+  <goal name="VC opt_bexpr.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.14" steps="422"/></proof>
+  </goal>
+  <goal name="VC opt_bexpr.2" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="422"/></proof>
+  </goal>
+  <goal name="VC opt_bexpr.3" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="VC opt_bexpr.3.0" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.03" steps="144"/></proof>
+   </goal>
+   <goal name="VC opt_bexpr.3.1" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.05" steps="144"/></proof>
+   </goal>
+   <goal name="VC opt_bexpr.3.2" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="4.04"/></proof>
+   </goal>
+   <goal name="VC opt_bexpr.3.3" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.13" steps="444"/></proof>
+   </goal>
+   <goal name="VC opt_bexpr.3.4" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.11" steps="446"/></proof>
+   </goal>
+   <goal name="VC opt_bexpr.3.5" expl="postcondition" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="VC opt_bexpr.3.5.0" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.13" steps="543"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.1" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.19" steps="490"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.2" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.11" steps="555"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.3" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.15" steps="589"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.4" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.13" steps="623"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.5" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.15" steps="640"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.6" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.13" steps="499"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.7" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.18" steps="1053"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.5.8" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.14" steps="685"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="VC opt_com" expl="VC for opt_com" proved="true">
+ <transf name="split_goal_right" proved="true" >
+  <goal name="VC opt_com.0" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.11" steps="422"/></proof>
+  </goal>
+  <goal name="VC opt_com.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.15" steps="422"/></proof>
+  </goal>
+  <goal name="VC opt_com.2" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="428"/></proof>
+  </goal>
+  <goal name="VC opt_com.3" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.12" steps="428"/></proof>
+  </goal>
+  <goal name="VC opt_com.4" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.11" steps="423"/></proof>
+  </goal>
+  <goal name="VC opt_com.5" expl="postcondition" proved="true">
+  <transf name="split_goal_right" proved="true" >
+   <goal name="VC opt_com.5.0" expl="postcondition" proved="true">
+   <transf name="induction_pr" proved="true" >
+    <goal name="VC opt_com.5.0.0" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.0.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.03"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.1" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.1.0" expl="VC for opt_com" proved="true">
+     <proof prover="0"><result status="valid" time="0.23" steps="674"/></proof>
+     <proof prover="1"><result status="valid" time="0.03"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.2" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.2.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.08"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.3" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.3.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.09"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.4" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.4.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.05"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.5" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.5.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.04"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.0.6" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.0.6.0" expl="VC for opt_com" proved="true">
+     <proof prover="0"><result status="valid" time="4.07" steps="15396"/></proof>
+     <proof prover="1"><result status="valid" time="0.09"/></proof>
+     <proof prover="3"><result status="valid" time="0.32"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="VC opt_com.5.1" expl="postcondition" proved="true">
+   <transf name="induction_pr" proved="true" >
+    <goal name="VC opt_com.5.1.0" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.0.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.02"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.1" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.1.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.03"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.2" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.2.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.03"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.3" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.3.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.04"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.4" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.4.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.03"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.5" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.5.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.02"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="VC opt_com.5.1.6" expl="VC for opt_com" proved="true">
+    <transf name="simplify_trivial_quantification_in_goal" proved="true" >
+     <goal name="VC opt_com.5.1.6.0" expl="VC for opt_com" proved="true">
+     <proof prover="1"><result status="valid" time="0.09"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+<file name="../imp.mlw">
+<theory name="Imp">
+ <goal name="ceval_deterministic_aux">
+ </goal>
+ <goal name="ceval_deterministic">
+ </goal>
+</theory>
+</file>
+</why3session>
