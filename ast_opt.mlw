@@ -91,13 +91,24 @@ module Ast_opt
     | Beq a1 a2 ->
       let a1' = opt_aexpr a1 in
       let a2' = opt_aexpr a2 in
-      (* TODO: optimize more? *)
-      Beq a1' a2'
+      match a1', a2' with
+      | Anum lhs, Anum rhs ->
+        if lhs = rhs then Btrue else Bfalse
+      | _, _               ->
+        Beq a1' a2'
+      end
     | Ble a1 a2 ->
       let a1' = opt_aexpr a1 in
       let a2' = opt_aexpr a2 in
-      (* TODO: optimize more? *)
-      Ble a1' a2'
+      match a1', a2' with
+      | Anum lhs, Anum rhs ->
+        if lhs <= rhs then
+          Btrue
+        else
+          Bfalse
+      | _, _               ->
+        Ble a1' a2'
+      end
     | Band b1 b2 ->
       let b1' = opt_bexpr b1 in
       let b2' = opt_bexpr b2 in

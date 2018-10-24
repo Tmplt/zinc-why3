@@ -62,10 +62,39 @@
    <proof prover="2"><result status="valid" time="4.04"/></proof>
    </goal>
    <goal name="VC opt_bexpr.3.3" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.13" steps="444"/></proof>
+   <transf name="split_vc" proved="true" >
+    <goal name="VC opt_bexpr.3.3.0" expl="postcondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.02"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.3.1" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.11" steps="464"/></proof>
+    <proof prover="1"><result status="timeout" time="5.00"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.3.2" expl="postcondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.03"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.3.3" expl="postcondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.02"/></proof>
+    </goal>
+   </transf>
    </goal>
    <goal name="VC opt_bexpr.3.4" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.11" steps="446"/></proof>
+   <transf name="split_vc" proved="true" >
+    <goal name="VC opt_bexpr.3.4.0" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.11" steps="453"/></proof>
+    <proof prover="1"><result status="timeout" time="5.00"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.4.1" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.11" steps="465"/></proof>
+    <proof prover="1"><result status="timeout" time="5.00"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.4.2" expl="postcondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.02"/></proof>
+    </goal>
+    <goal name="VC opt_bexpr.3.4.3" expl="postcondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.02"/></proof>
+    </goal>
+   </transf>
    </goal>
    <goal name="VC opt_bexpr.3.5" expl="postcondition" proved="true">
    <transf name="split_vc" proved="true" >
