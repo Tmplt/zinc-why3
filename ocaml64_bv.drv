@@ -22,7 +22,7 @@ module bv.BV32
   syntax val to_int      "Z.of_int (Int32.to_int %1)"
   syntax val of_int      "Int32.of_int(Z.to_int %1)"
   syntax val add      "Int32.add %1 %2"
-  syntax val sub      "SHOULD_NOT_BE_HERE"
+  syntax val sub      "Int32.sub %1 %2"
   syntax val neg      "SHOULD_NOT_BE_HERE"
   syntax val mul      "SHOULD_NOT_BE_HERE"
   syntax val udiv      "SHOULD_NOT_BE_HERE"
