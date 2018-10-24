@@ -8,6 +8,12 @@
 <prover id="3" name="CVC4" version="1.6" timelimit="5" steplimit="0" memlimit="1000"/>
 <file name="../ast_opt.mlw" proved="true">
 <theory name="Ast_opt" proved="true">
+ <goal name="VC aexpr_eq" expl="VC for aexpr_eq" proved="true">
+ <proof prover="0"><result status="valid" time="0.54" steps="1877"/></proof>
+ </goal>
+ <goal name="VC bexpr_eq" expl="VC for bexpr_eq" proved="true">
+ <proof prover="0"><result status="valid" time="0.33" steps="1242"/></proof>
+ </goal>
  <goal name="VC opt_aexpr" expl="VC for opt_aexpr" proved="true">
  <transf name="split_goal_right" proved="true" >
   <goal name="VC opt_aexpr.0" expl="variant decrease" proved="true">

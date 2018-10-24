@@ -7,11 +7,12 @@ module Ast_opt
 
   (* TODO: use imp_exn *)
   use imp_ex_assignment.Imp_exn
-  
-  val eq (a b: 'a) : bool
-    ensures { result = (a = b) }
 
   (*
+  val eq (a b: 'a) : bool
+    ensures { result = (a = b) }
+  *)
+
   let rec aexpr_eq (a b:aexpr)
     variant { a, b }
     ensures { result = (a = b) }
@@ -31,7 +32,24 @@ module Ast_opt
       aexpr_eq a1 b1 && aexpr_eq a2 b2
     | _, _ -> false
     end
-  *)
+
+  let rec bexpr_eq (a b:bexpr)
+    variant { a, b }
+    ensures { result = (a = b) }
+  =
+    match (a, b) with
+    | Btrue, Btrue               -> true
+    | Bfalse, Bfalse             -> true
+    | Bnot b1, Bnot b2           ->
+      bexpr_eq b1 b2
+    | Beq a1 a2, Beq b1 b2       ->
+      aexpr_eq a1 b1 && aexpr_eq a2 b2
+    | Ble a1 a2, Ble b1 b2       ->
+      aexpr_eq a1 b1 && aexpr_eq a2 b2
+    | Band b11 b12, Band b21 b22 ->
+      bexpr_eq b11 b21 && bexpr_eq b12 b22
+    | _, _                       -> false
+    end
 
   let rec opt_aexpr (e:aexpr) : aexpr
     variant { e }
@@ -70,7 +88,7 @@ module Ast_opt
       match e1', e2' with
       | Anum n1, Anum n2 -> Anum (n1 - n2)
       | _, _             ->
-        if eq e1' e2' then
+        if aexpr_eq e1' e2' then
           Anum 0
         else
           Asub e1' e2'
@@ -81,7 +99,7 @@ module Ast_opt
       match e1', e2' with
       | Anum n1, Anum n2 -> Anum (bv_sub n1 n2)
       | _, _             ->
-        if eq e1' e2' then
+        if aexpr_eq e1' e2' then
           Anum 0
         else
           Asubu e1' e2'
@@ -91,7 +109,7 @@ module Ast_opt
   let rec opt_bexpr (b:bexpr) : bexpr
     variant { b }
     ensures { forall st. beval st result = beval st b }
-    
+
     (*
     ensures {
       forall st.
@@ -130,13 +148,13 @@ module Ast_opt
       | Bfalse, _    -> Bfalse
       | _, Bfalse    -> Bfalse
       | _, _         ->
-      if eq b1' b2' then
+      if bexpr_eq b1' b2' then
         b1'
       else
         Band b1' b2'
       end
     end
-    
+
   let rec opt_com (c:com) : com
     variant { c }
     ensures {
@@ -152,7 +170,7 @@ module Ast_opt
   =
     match c with
     | Cskip        -> Cskip
-    
+
     | Cassign id a -> Cassign id (opt_aexpr a)
     | Cseq c1 c2   ->
       (* match for CSkip *)
