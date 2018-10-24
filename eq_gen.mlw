@@ -1,0 +1,3 @@
+module Eq
+  val eq (a b: 'a) : bool ensures {result = (a = b)}
+end
