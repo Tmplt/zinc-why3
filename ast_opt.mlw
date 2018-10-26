@@ -7,23 +7,16 @@ module Ast_opt
   use eq_gen.Eq
 
   (* TODO: use imp_exn *)
-  use imp_ex_assignment.Imp_exn
+  use imp_ex_assignment.Imp_count
 
   let rec opt_aexpr (e:aexpr) : aexpr
     variant { e }
     ensures { forall st. aeval st result = aeval st e }
-    (*
-    ensures {
-      forall st.
-      let (_, opt_nodecount) = aeval_ex st result in
-      let (_, nodecount) = aeval_ex st e in
-      opt_nodecount <= nodecount
-    }
-    *)
+    ensures { aeval_count result <= aeval_count e }
   =
     match e with
     | Anum n      -> Anum n
-    | Avar x      -> Avar x
+    | Avar id     -> Avar id
 
     (* Constant reductions *)
     | Aadd e1 e2  ->
@@ -67,15 +60,7 @@ module Ast_opt
   let rec opt_bexpr (b:bexpr) : bexpr
     variant { b }
     ensures { forall st. beval st result = beval st b }
-
-    (*
-    ensures {
-      forall st.
-      let (_, opt_nodecount) = beval_ex st result in
-      let (_, nodecount) = beval_ex st b in
-      opt_nodecount <= nodecount
-    }
-    *)
+    ensures { beval_count result <= beval_count b }
   =
     match b with
     | Btrue  -> Btrue
@@ -126,23 +111,15 @@ module Ast_opt
 
   let rec opt_com (c:com) : com
     variant { c }
-    ensures {
-      forall st st'. ceval st result st' = ceval st c st'
-
-      (*
-      forall st.
-      let (opt_st', opt_nodecount) = ceval_ex st result in
-      let (st', nodecount) = ceval_ex st c in
-      opt_st' = st' /\ opt_nodecount <= nodecount
-      *)
-    }
+    ensures { forall st st'. ceval st result st' = ceval st c st' }
+    ensures { ceval_count result <= ceval_count c }
   =
     match c with
     | Cskip        -> Cskip
 
     | Cassign id a -> Cassign id (opt_aexpr a)
     | Cseq c1 c2   ->
-      (* match for CSkip *)
+      (* match for CSkip (too complicated in case of Cwhile?) *)
       let c1' = opt_com c1 in
       let c2' = opt_com c2 in
       Cseq c1' c2'

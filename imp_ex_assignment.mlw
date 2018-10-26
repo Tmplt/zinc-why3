@@ -154,3 +154,95 @@ module Imp_exn
     else
       raise (MaxStepsReached c')
 end
+
+(* Same as above, but only counts the number of execution steps *)
+module Imp_count
+
+  use imp.Imp
+  use state.State
+  use bool.Bool
+  use int.Int
+  use bv_op.BV_OP
+
+  let rec function aeval_count (e:aexpr): int
+    variant { e }
+    ensures { result > 0 }
+  =
+    match e with
+      | Anum _      -> 1
+      | Avar _      -> 1
+      | Aadd e1 e2  ->
+        let cntl = aeval_count e1 in
+        let cntr = aeval_count e2 in
+        cntl + cntr + 1
+      | Aaddu e1 e2 ->
+        let cntl = aeval_count e1 in
+        let cntr = aeval_count e2 in
+        cntl + cntr + 1
+      | Asub e1 e2  ->
+        let cntl = aeval_count e1 in
+        let cntr = aeval_count e2 in
+        cntl + cntr + 1
+      | Asubu e1 e2  ->
+        let cntl = aeval_count e1 in
+        let cntr = aeval_count e2 in
+        cntl + cntr + 1
+    end
+
+  let rec function beval_count (b:bexpr): int
+    variant { b }
+    ensures { result > 0 }
+  =
+    match b with
+      | Btrue      -> 1
+      | Bfalse     -> 1
+      | Bnot b'    ->
+        let cnt = beval_count b' in
+        cnt + 1
+      | Band b1 b2 ->
+        let cntl = beval_count b1 in
+        let cntr = beval_count b2 in
+        cntl + cntr + 1
+      | Beq a1 a2  ->
+        let cntl = aeval_count a1 in
+        let cntr = aeval_count a2 in
+        cntl + cntr + 1
+      | Ble a1 a2  ->
+        let cntl = aeval_count a1 in
+        let cntr = aeval_count a2 in
+        cntl + cntr + 1
+    end
+    
+  let function max (a b:int) : int =
+    if a > b then a else b
+   
+  let rec function ceval_count (c:com) : int
+    ensures { result > 0 }
+  =
+    match c with
+    | Cskip            -> 1
+    | Cassign _ aexpr  ->
+      let cnt = aeval_count aexpr in
+      cnt + 1
+    | Cseq c1 c2       ->
+      let cnt1 = ceval_count c1 in
+      let cnt2 = ceval_count c2 in
+      cnt1 + cnt2
+    | Cif bexpr c1 c2  ->
+      let cnt = beval_count bexpr in
+      let cnt' = ceval_count c1 in
+      let cnt'' = ceval_count c2 in
+      max (cnt + cnt') (cnt + cnt'')
+    | Cwhile bexpr com ->
+      (* A abstract cost, if anything.
+       * We only want to ensure that an optimized AST doesn't cost more to
+       * evaluate than an unoptimized one. The easiest way about this is to
+       * not dig down into the execution (eval the bexpr, and if true add the
+       * execution count of the com, etc.); this only allows us to count what
+       * "we can see" on the top-level, that being the sum of the bexpr and com.
+       *)
+      let cnt = beval_count bexpr in
+      let cnt' = ceval_count com in
+      cnt + cnt'
+    end
+end
