@@ -23,7 +23,7 @@ module Ast_opt
       let e1' = opt_aexpr e1 in
       let e2' = opt_aexpr e2 in
       match e1', e2' with
-      | Anum n1, Anum n2 -> Anum (n1 + n2)
+      (* | Anum n1, Anum n2 -> Anum (n1 + n2) *)
       | _, _             -> Aadd e1' e2'
       end
     | Aaddu e1 e2 ->
@@ -101,6 +101,8 @@ module Ast_opt
       | Btrue, Btrue -> Btrue
       | Bfalse, _    -> Bfalse
       | _, Bfalse    -> Bfalse
+      | Btrue, b     -> b
+      | b, Btrue     -> b
       | _, _         ->
       if eq b1' b2' then
         b1'
