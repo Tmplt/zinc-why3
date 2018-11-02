@@ -128,6 +128,10 @@ module Vm_Ex
         let (n1, s') = pop s in
         let (n2, s'') = pop s' in
         VMS (p + 1) r (push (n2 - n1) s'') m
+      | Isubu       -> (* pop two values, push their difference *)
+        let (n1, s') = pop s in
+        let (n2, s'') = pop s' in
+        VMS (p + 1) r (push (bv_sub n2 n1) s'') m
       | Ibeq ofs    -> (* pop n2, pop n1, skip ofs forward if n1 = n2 *)
         let (n2, s') = pop s in
         let (n1, s'') = pop s' in

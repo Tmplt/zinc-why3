@@ -115,21 +115,24 @@
   <proof prover="6"><result status="valid" time="0.13" steps="444"/></proof>
   </goal>
   <goal name="VC instr_ex.21" expl="postcondition" proved="true">
-  <proof prover="6"><result status="valid" time="0.17" steps="570"/></proof>
+  <proof prover="6"><result status="valid" time="0.14" steps="453"/></proof>
   </goal>
   <goal name="VC instr_ex.22" expl="postcondition" proved="true">
-  <proof prover="6"><result status="valid" time="0.17" steps="569"/></proof>
+  <proof prover="6"><result status="valid" time="0.17" steps="570"/></proof>
   </goal>
   <goal name="VC instr_ex.23" expl="postcondition" proved="true">
   <proof prover="6"><result status="valid" time="0.17" steps="569"/></proof>
   </goal>
   <goal name="VC instr_ex.24" expl="postcondition" proved="true">
+  <proof prover="6"><result status="valid" time="0.17" steps="569"/></proof>
+  </goal>
+  <goal name="VC instr_ex.25" expl="postcondition" proved="true">
   <proof prover="6"><result status="valid" time="0.16" steps="597"/></proof>
   </goal>
-  <goal name="VC instr_ex.25" expl="exceptional postcondition" proved="true">
+  <goal name="VC instr_ex.26" expl="exceptional postcondition" proved="true">
   <proof prover="6" timelimit="10"><result status="valid" time="0.04" steps="162"/></proof>
   </goal>
-  <goal name="VC instr_ex.26" expl="unreachable point" proved="true">
+  <goal name="VC instr_ex.27" expl="unreachable point" proved="true">
   <proof prover="6" timelimit="10"><result status="valid" time="0.04" steps="158"/></proof>
   </goal>
  </transf>
